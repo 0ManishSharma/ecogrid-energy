@@ -1,0 +1,33 @@
+name: EcoGrid CI and Fitness Functions
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  fitness-functions:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - name: Install tools
+        run: uv sync --locked
+      - name: Architecture boundaries (import-linter)
+        run: uv run lint-imports
+      - name: Lint (ruff)
+        run: uv run ruff check services tests
+      - name: Tests, coverage, service count, contracts
+        run: uv run python -m pytest --cov=services --cov-fail-under=80
+      - name: Complexity (xenon, maximum rank B)
+        run: uv run xenon --max-absolute B services
+      - name: Static security scan (bandit, high severity)
+        run: uv run bandit -r services -lll
+      - name: Dependency scan (pip-audit)
+        run: |
+          uv export --no-emit-project -o audit-requirements.txt
+          uv run pip-audit -r audit-requirements.txt --no-deps --disable-pip

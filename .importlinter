@@ -1,0 +1,10 @@
+[importlinter]
+root_package = services
+
+[importlinter:contract:independent-services]
+name = Services are independent and talk only through events
+type = independence
+modules =
+    services.marketplace
+    services.smart_meter_integration
+    services.financial_settlement

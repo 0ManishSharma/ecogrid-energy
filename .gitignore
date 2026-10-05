@@ -1,0 +1,17 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+.coverage
+audit-requirements.txt
+.import_linter_cache/.venv/
+__pycache__/
+.import_linter_cache/
+.coverage
+audit-requirements.txt
